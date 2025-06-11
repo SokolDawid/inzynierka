@@ -18,10 +18,10 @@
 
         
     <!-- Template Stylesheet -->
-    @vite('resources/css/style.css')
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     <!-- Customized Bootstrap Stylesheet -->
-    @vite('resources/css/bootstrap.min.css')
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('lib/animate/animate.min.css') }}" rel="stylesheet"></link>
