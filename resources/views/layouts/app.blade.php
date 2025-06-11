@@ -221,7 +221,7 @@
     <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
     <!-- Template Javascript -->
-    @vite('resources/js/main.js')
+    <script src="{{ asset('js/main.js') }}"></script>
 </body>
 
 </html>
