@@ -18,10 +18,10 @@
 
         
     <!-- Template Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('resources/css/style.css') }}">
+    @vite('resources/css/style.css')
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('resources/css/bootstrap.min.css') }}">
+    @vite('resources/css/bootstrap.min.css')
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('lib/animate/animate.min.css') }}" rel="stylesheet"></link>
@@ -221,7 +221,7 @@
     <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
     <!-- Template Javascript -->
-    <script src="{{ asset('resources/js/main.js') }}"></script>
+    @vite('resources/js/main.js')
 </body>
 
 </html>
