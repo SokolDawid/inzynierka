@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ClassManagingController extends Controller
 {
     public function index($classId)
     {
         $class = DB::table('classes')->where('ClassID', $classId)->first();
+
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
 
         $lessons = DB::table('schedule')
             ->where('ClassID', $classId)
@@ -31,6 +37,13 @@ class ClassManagingController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
 
+        $class = DB::table('classes')->where('ClassID', $classId)->first();
+
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
+
         DB::table('classes')
             ->where('ClassID', $classId)
             ->update([
@@ -51,6 +64,11 @@ class ClassManagingController extends Controller
 
         $class = DB::table('classes')->where('ClassID', $classId)->first();
 
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
+
         DB::table('schedule')->insert([
             'ClassID' => $classId,
             'Date' => $request->input('date'),
@@ -64,20 +82,18 @@ class ClassManagingController extends Controller
 
     public function lessonReport($scheduleId)
     {
-        $lesson = DB::table('schedule')
-            ->where('ScheduleID', $scheduleId)
-            ->first();
+        $lesson = DB::table('schedule')->where('ScheduleID', $scheduleId)->first();
+        if (!$lesson) {
+            abort(404, 'Lekcja nie istnieje.');
+        }
 
-        $class = DB::table('classes')
-            ->where('ClassID', $lesson->ClassID)
-            ->first();
+        $class = DB::table('classes')->where('ClassID', $lesson->ClassID)->first();
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
 
-        $attendance = DB::table('attendance')
-            ->join('classes_members', 'attendance.MemberID', '=', 'classes_members.MemberID')
-            ->join('children', 'classes_members.ChildID', '=', 'children.ChildID')
-            ->where('attendance.ScheduleID', $scheduleId)
-            ->select('children.FirstName', 'children.LastName', 'attendance.Attendance')
-            ->get();
+        $attendance = DB::table('attendance')->where('ScheduleID', $scheduleId)->get();
 
         $present = $attendance->where('Attendance', 'Present')->count();
         $absent = $attendance->where('Attendance', 'Absent')->count();
@@ -93,12 +109,25 @@ class ClassManagingController extends Controller
 
     public function destroy($classId)
     {
+        $class = DB::table('classes')->where('ClassID', $classId)->first();
+
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
+
         DB::table('classes')->where('ClassID', $classId)->delete();
         return redirect()->route('classes')->with('success', 'Zajęcia zostały usunięte.');
     }
 
     public function students($classId)
     {
+        $class = DB::table('classes')->where('ClassID', $classId)->first();
+
+        // Sprawdzenie właściciela zajęć
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tych zajęć.');
+        }
 
         return view('class-students', [
             'classId' => $classId,

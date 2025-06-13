@@ -26,14 +26,12 @@ class RegisterForm extends Component
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'digits:9'],
-            'birthdate' => ['required', 'date', 'before_or_equal:today'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'FirstName' => $this->first_name,
             'LastName' => $this->last_name,
-            'BirthDate' => $this->birthdate,
             'PhoneNumber' => $this->phone,
             'email' => $this->email,
             'password' => Hash::make($this->password),

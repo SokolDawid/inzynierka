@@ -10,6 +10,12 @@ class ClassMembersController extends Controller
 {
     public function members($classId)
     {
+        // Pobierz zajęcia i sprawdź właściciela
+        $class = DB::table('classes')->where('ClassID', $classId)->first();
+        if (!$class || $class->TeacherID != Auth::id()) {
+            abort(403, 'Nie masz dostępu do tej listy uczestników.');
+        }
+
         $members = DB::table('classes_members')
             ->join('children', 'classes_members.ChildID', '=', 'children.ChildID')
             ->where('classes_members.ClassID', $classId)

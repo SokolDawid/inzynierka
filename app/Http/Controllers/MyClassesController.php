@@ -12,25 +12,29 @@ class MyClassesController extends Controller
     {
         $userId = Auth::id();
 
-
-        $childrenIds = DB::table('children')
+        $children = DB::table('children')
             ->where('ParentID', $userId)
-            ->pluck('ChildID');
+            ->get();
 
         $classes = DB::table('classes')
             ->join('classes_members', 'classes.ClassID', '=', 'classes_members.ClassID')
             ->join('users', 'classes.TeacherID', '=', 'users.UserID')
-            ->whereIn('classes_members.ChildID', $childrenIds)
+            ->join('children', 'classes_members.ChildID', '=', 'children.ChildID')
+            ->whereIn('classes_members.ChildID', $children->pluck('ChildID'))
             ->select(
                 'classes.*',
                 DB::raw("CONCAT(users.firstname, ' ', users.lastname) as TeacherName"),
-                'classes_members.ChildID'
+                'classes_members.ChildID',
+                'children.FirstName as ChildFirstName',
+                'children.LastName as ChildLastName'
             )
-            ->get();
+            ->get()
+            ->groupBy('ChildID');
 
         return view('my-classes', [
             'page' => 'Moje zajęcia',
-            'classes' => $classes
+            'children' => $children,
+            'classesByChild' => $classes
         ]);
     }
 }

@@ -172,7 +172,7 @@ h6,
     height: 10px;
     top: 0;
     left: 0;
-    background: url(/public/img/bg-header-top.png) center center repeat-x;
+    background: url(/img/bg-header-top.png) center center repeat-x;
     z-index: 1;
 }
 
@@ -181,7 +181,7 @@ h6,
     height: 19px;
     top: auto;
     bottom: 0;
-    background: url(/public/img/bg-header-bottom.png) center center repeat-x;
+    background: url(/img/bg-header-bottom.png) center center repeat-x;
 }
 
 @media (max-width: 768px) {
@@ -240,7 +240,7 @@ h6,
 }
 
 .page-header {
-    background: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), url(/public/img/carousel-1.png) center center no-repeat;
+    background: linear-gradient(rgba(0, 0, 0, .2), rgba(0, 0, 0, .2)), url(/img/carousel-1.png) center center no-repeat;
     background-size: cover;
 }
 
@@ -354,6 +354,23 @@ h6,
     margin-top: -10px;
 }
 
+.classes-item img {
+    width: 225px; 
+    height: 225px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    display: block;
+    margin: 0 auto;
+}
+
+.classes-item.no-photo {
+    padding-top: 0 !important;
+}
+
+.classes-item.no-photo .bg-light.rounded.p-4.pt-5.mt-n5 {
+    margin-top: 0 !important;
+    padding-top: 2rem !important;
+}
 
 /*** Team ***/
 .team-item .team-text {
